@@ -22,7 +22,7 @@ public class HelixTeamHubRepositoryTest {
         thrown.expect(HelixTeamHubURLException.class);
         thrown.expectMessage("The URL doesn't appear to be a Helix TeamHub URL.");
 
-        new HelixTeamHubRepository("https://github.com/jenkinsci/helix-teamhub-plugin.git");
+        new HelixTeamHubRepository("hth@helixteamhub.com:foo");
     }
 
     @Test
@@ -31,6 +31,22 @@ public class HelixTeamHubRepositoryTest {
 
         assertEquals("bar", repository.getProjectId());
         assertEquals("baz", repository.getId());
+    }
+
+    @Test
+    public void acceptsHelixGitHTTPSURL() throws HelixTeamHubURLException {
+        repository = new HelixTeamHubRepository("https://hth@helixteamhub.com/foo/bar");
+
+        assertEquals("foo", repository.getProjectId());
+        assertEquals("bar", repository.getId());
+    }
+
+    @Test
+    public void acceptsCustomHelixGitHTTPSURL() throws HelixTeamHubURLException {
+        repository = new HelixTeamHubRepository("https://hth@helixteamhub.com/some/path/1/2/3/foo/bar.git");
+
+        assertEquals("foo", repository.getProjectId());
+        assertEquals("bar", repository.getId());
     }
 
     @Test
@@ -55,6 +71,22 @@ public class HelixTeamHubRepositoryTest {
 
         assertEquals("bar", repository.getProjectId());
         assertEquals("baz", repository.getId());
+    }
+
+    @Test
+    public void acceptsHelixGitSSHURL() throws HelixTeamHubURLException {
+        repository = new HelixTeamHubRepository("hth@helixteamhub.com:foo/bar");
+
+        assertEquals("foo", repository.getProjectId());
+        assertEquals("bar", repository.getId());
+    }
+
+    @Test
+    public void acceptsCustomHelixGitSSHURL() throws HelixTeamHubURLException {
+        repository = new HelixTeamHubRepository("hth@helixteamhub.com:some/path/1/2/3/foo/bar.git");
+
+        assertEquals("foo", repository.getProjectId());
+        assertEquals("bar", repository.getId());
     }
 
     @Test

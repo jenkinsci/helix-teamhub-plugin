@@ -3,8 +3,13 @@
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <version>2.36</version>
+        <version>3.36</version>
     </parent>
+
+    <properties>
+        <java.level>8</java.level>
+        <jenkins.version>2.60.3</jenkins.version>
+    </properties>
 
     <artifactId>helix-teamhub</artifactId>
     <version>1.1.5-SNAPSHOT</version>

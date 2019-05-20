@@ -1,7 +1,6 @@
 package com.helixteamhub.plugins.jenkins;
 
 import com.helixteamhub.plugin.jenkins.HelixTeamHubEvent;
-import com.helixteamhub.plugin.jenkins.HelixTeamHubRepository;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.junit.Before;
@@ -19,12 +18,11 @@ public class HelixTeamHubEventTest  {
         String name = "test";
         String projectId = "platform";
         String repositoryId = "backend";
-        HelixTeamHubRepository repository = new HelixTeamHubRepository(projectId, repositoryId);
         String ref = "master";
         String revisionId = "d27327b131054d4a9922546aa5ecb14ba22f45ad";
         String buildUrl = "https://example.com/jenkins/job/test/42";
 
-        event = new HelixTeamHubEvent(operation, name, repository, ref, revisionId, buildUrl);
+        event = new HelixTeamHubEvent(operation, name, projectId, repositoryId, ref, revisionId, buildUrl);
     }
 
     @Test

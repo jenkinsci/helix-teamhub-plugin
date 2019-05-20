@@ -13,10 +13,10 @@ public class HelixTeamHubEvent {
     private String[] commits;
     private String[] resources;
 
-    public HelixTeamHubEvent(String operation, String name, HelixTeamHubRepository helixTeamHubRepository, String ref, String revisionId, String buildUrl) {
+    public HelixTeamHubEvent(String operation, String name, String projectId, String repositoryId, String ref, String revisionId, String buildUrl) {
         this.name = name;
-        this.project = helixTeamHubRepository.getProjectId();
-        this.repository = helixTeamHubRepository.getId();
+        this.project = projectId;
+        this.repository = repositoryId;
         this.ref = ref;
         this.operation = operation;
         this.commits = new String[]{revisionId};

@@ -22,20 +22,34 @@ import java.io.PrintStream;
 public class HelixTeamHubNotifier extends Notifier {
 
     private static final String SCM_GIT = "hudson.plugins.git.GitSCM";
-
     private static final String SCM_SUBVERSION = "hudson.scm.SubversionSCM";
-
     private static final String SCM_MERCURIAL = "hudson.plugins.mercurial.MercurialSCM";
 
     private final String accountKey;
+    private final String projectId;
+    private final String repositoryId;
 
     @DataBoundConstructor
-    public HelixTeamHubNotifier(String accountKey) {
+    public HelixTeamHubNotifier(String accountKey, String projectId, String repositoryId) {
         this.accountKey = accountKey;
+        this.projectId = projectId;
+        this.repositoryId = repositoryId;
     }
 
     public String getAccountKey() {
         return accountKey;
+    }
+
+    public String getRepositoryId() {
+        return repositoryId;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public boolean projectIdAndRepositoryIdProvided() {
+        return projectId != null && !projectId.isEmpty() && repositoryId != null && !repositoryId.isEmpty();
     }
 
     public BuildStepMonitor getRequiredMonitorService() {
@@ -135,24 +149,30 @@ public class HelixTeamHubNotifier extends Notifier {
         String ref = getRef(scm, environment);
         String revisionId = getRevisionId(scm, environment);
         String buildUrl = getBuildUrl(environment);
-        String repositoryURL = getRepositoryURL(scm, environment);
+        String projectId = getProjectId();
+        String repositoryId = getRepositoryId();
 
-        HelixTeamHubRepository repository;
+        if (!projectIdAndRepositoryIdProvided()) {
+            String repositoryURL = getRepositoryURL(scm, environment);
+            HelixTeamHubRepository repository;
 
-        try {
-            repository = new HelixTeamHubRepository(repositoryURL);
-        } catch (HelixTeamHubURLException ex) {
-            logError(listener, "The configured repository URL is not a Helix TeamHub URL.", ex);
-            return;
+            try {
+                repository = new HelixTeamHubRepository(repositoryURL);
+                projectId = repository.getProjectId();
+                repositoryId = repository.getId();
+            } catch (HelixTeamHubURLException ex) {
+                logError(listener, "The configured repository URL is not a Helix TeamHub URL.", ex);
+                return;
+            }
         }
 
         HelixTeamHubAPI api = new HelixTeamHubAPI(getDescriptor().getHostname(), getApiKeys(getDescriptor()));
-        HelixTeamHubEvent event = new HelixTeamHubEvent(operation, jobName, repository, ref, revisionId, buildUrl);
+        HelixTeamHubEvent event = new HelixTeamHubEvent(operation, jobName, projectId, repositoryId, ref, revisionId, buildUrl);
 
         try {
             api.create("events", event.toJSON());
         } catch (HelixTeamHubException ex) {
-            logError(listener, "Failed to create event.", ex);
+            logError(listener, String.format("Failed to create event.%nEvent: %s", event.toJSON()), ex);
         }
     }
 
