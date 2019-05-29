@@ -12,7 +12,7 @@
     </properties>
 
     <artifactId>helix-teamhub</artifactId>
-    <version>1.1.5-SNAPSHOT</version>
+    <version>1.1.5</version>
     <packaging>hpi</packaging>
     <name>Helix TeamHub Plugin</name>
     <description>Creates build events to Helix TeamHub</description>
@@ -60,7 +60,7 @@
         <connection>scm:git:git@github.com:jenkinsci/helix-teamhub-plugin.git</connection>
         <developerConnection>scm:git:git@github.com:jenkinsci/helix-teamhub-plugin.git</developerConnection>
         <url>https://github.com/jenkinsci/helix-teamhub-plugin</url>
-      <tag>HEAD</tag>
+      <tag>helix-teamhub-1.1.5</tag>
     </scm>
 
     <repositories>
